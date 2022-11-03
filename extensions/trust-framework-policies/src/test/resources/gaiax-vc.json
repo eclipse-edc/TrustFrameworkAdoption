@@ -1,0 +1,28 @@
+{
+  "123456": {
+    "vc": {
+      "id": "123456",
+      "credentialSubject": {
+        "id": "test",
+        "gx-participant:name": "foo",
+        "gx-participant:registrationNumber": "123456",
+        "gx-participant:headquarterAddress": {
+          "gx-participant:region": "a region",
+          "gx-participant:street-address": "somewhere in DE",
+          "gx-participant:postal-code": "123456",
+          "gx-participant:locality": "Munich",
+          "gx-participant:country-name": "DE"
+        },
+        "gx-participant:legalAddress": {
+          "gx-participant:region": "another region",
+          "gx-participant:street-address": "somewhere in FR",
+          "gx-participant:postal-code": "456789",
+          "gx-participant:locality": "Paris",
+          "gx-participant:country": "FR"
+        }
+      },
+      "iss": "did:web:gaia-x",
+      "sub": "did:web:test"
+    }
+  }
+}

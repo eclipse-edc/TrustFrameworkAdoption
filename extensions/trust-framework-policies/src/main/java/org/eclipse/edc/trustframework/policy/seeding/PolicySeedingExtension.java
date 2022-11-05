@@ -17,6 +17,7 @@ package org.eclipse.edc.trustframework.policy.seeding;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.dataspaceconnector.policy.model.Permission;
+import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Extension;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Inject;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Setting;
 import org.eclipse.dataspaceconnector.spi.policy.engine.PolicyEngine;
@@ -39,7 +40,11 @@ import java.util.Optional;
 /**
  * Extension for seeding {@link PolicyEngine} and {@link RuleBindingRegistry} based on a static config json file.
  */
+@Extension(value = PolicySeedingExtension.NAME)
 public class PolicySeedingExtension implements ServiceExtension {
+
+    public static final String NAME = "Trust Framework Policy Seeding";
+
     @Setting(value = "Path to the static configuration file containing the policy entries")
     private static final String CONFIG_FILE_PATH_SETTING = "edc.trustframework.policies.file.path";
 
@@ -53,7 +58,7 @@ public class PolicySeedingExtension implements ServiceExtension {
 
     @Override
     public String name() {
-        return "Trust Framework Policy Seeding";
+        return NAME;
     }
 
     @Override

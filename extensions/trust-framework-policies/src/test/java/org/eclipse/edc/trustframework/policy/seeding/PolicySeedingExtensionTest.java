@@ -31,9 +31,11 @@ import org.eclipse.dataspaceconnector.spi.system.ServiceExtensionContext;
 import org.eclipse.dataspaceconnector.spi.system.injection.ObjectFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 
 import java.util.Collections;
 import java.util.List;
@@ -54,7 +56,7 @@ class PolicySeedingExtensionTest {
     private PolicyEngine policyEngine;
 
     @ParameterizedTest(name = "{index} {0}")
-    @MethodSource("providerTestScenario")
+    @ArgumentsSource(TestScenarioProvider.class)
     void verifyPolicyEngineEvaluate(String name, Policy policy, boolean expected) {
         var claims = gaiaxVerifiableCredential();
         extension.initialize(context);
@@ -63,13 +65,16 @@ class PolicySeedingExtensionTest {
         assertThat(result.succeeded()).isEqualTo(expected);
     }
 
-    private static Stream<Arguments> providerTestScenario() {
-        return Stream.of(
-                Arguments.of("PARTICIPANT NAME EQ", createPolicy("gx-participant:name", Operator.EQ, "foo"), true),
-                Arguments.of("PARTICIPANT NAME NEQ", createPolicy("gx-participant:name", Operator.NEQ, "bar"), true),
-                Arguments.of("PARTICIPANT HEADQUARTER ADDRESS COUNTRY IN", createPolicy("gx-participant:headquarterAddress.country-name", Operator.IN, List.of("DE", "ES")), true),
-                Arguments.of("PARTICIPANT LEGAL ADDRESS COUNTRY IN", createPolicy("gx-participant:legalAddress.country", Operator.IN, List.of("DE", "ES")), false)
-        );
+    public static class TestScenarioProvider implements ArgumentsProvider {
+        @Override
+        public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
+            return Stream.of(
+                    Arguments.of("PARTICIPANT NAME EQ", createPolicy("gx-participant:name", Operator.EQ, "foo"), true),
+                    Arguments.of("PARTICIPANT NAME NEQ", createPolicy("gx-participant:name", Operator.NEQ, "bar"), true),
+                    Arguments.of("PARTICIPANT HEADQUARTER ADDRESS COUNTRY IN", createPolicy("gx-participant:headquarterAddress.country-name", Operator.IN, List.of("DE", "ES")), true),
+                    Arguments.of("PARTICIPANT LEGAL ADDRESS COUNTRY IN", createPolicy("gx-participant:legalAddress.country", Operator.IN, List.of("DE", "ES")), false)
+            );
+        }
     }
 
     private static Policy createPolicy(String type, Operator operator, Object right) {
@@ -88,16 +93,6 @@ class PolicySeedingExtensionTest {
                 .permission(permission)
                 .build();
     }
-
-    //    @BeforeAll
-    //    static void setProps() {
-    //        System.setProperty(POLICY_FILE_SETTING, "src/test/resources/policies.json");
-    //    }
-    //
-    //    @AfterAll
-    //    static void unsetProps() {
-    //        System.clearProperty(POLICY_FILE_SETTING);
-    //    }
 
     @BeforeEach
     void setUp(ServiceExtensionContext context, ObjectFactory factory) {

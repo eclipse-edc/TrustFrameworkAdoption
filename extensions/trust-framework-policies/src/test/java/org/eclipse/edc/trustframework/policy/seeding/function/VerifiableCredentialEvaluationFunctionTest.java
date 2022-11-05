@@ -22,9 +22,11 @@ import org.eclipse.dataspaceconnector.spi.policy.engine.PolicyContext;
 import org.eclipse.dataspaceconnector.spi.types.TypeManager;
 import org.eclipse.edc.trustframework.policy.seeding.exception.PolicyEvaluationException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -45,7 +47,7 @@ class VerifiableCredentialEvaluationFunctionTest {
     private static final TypeManager TYPE_MANAGER = new TypeManager();
 
     @ParameterizedTest(name = "{index} {0}")
-    @MethodSource("providerTestScenario")
+    @ArgumentsSource(TestScenarioProvider.class)
     void verifyEvaluate(String name, String jsonPath, Operator operator, Object right, boolean expected) throws IOException {
         var claims = gaiaxVerifiableCredential();
         var constraint = new VerifiableCredentialEvaluationFunction(mock(Monitor.class), TYPE_MANAGER.getMapper(), jsonPath);
@@ -70,12 +72,15 @@ class VerifiableCredentialEvaluationFunctionTest {
         return new PolicyContextImpl(participantAgent, Map.of());
     }
 
-    private static Stream<Arguments> providerTestScenario() {
-        return Stream.of(
-                Arguments.of("PARTICIPANT NAME EQ", GAIAX_VC_PARTICIPANT_NAME, Operator.EQ, "foo", true),
-                Arguments.of("PARTICIPANT NAME NEQ", GAIAX_VC_PARTICIPANT_NAME, Operator.NEQ, "bar", true),
-                Arguments.of("PARTICIPANT HEADQUARTER ADDRESS COUNTRY IN", GAIAX_VC_PARTICIPANT_HEADQUARTER_ADDRESS_COUNTRY, Operator.IN, List.of("DE", "ES"), true),
-                Arguments.of("PARTICIPANT LEGAL ADDRESS COUNTRY IN", GAIAX_VC_PARTICIPANT_LEGAL_ADDRESS_COUNTRY, Operator.IN, List.of("DE", "ES"), false)
-        );
+    private static final class TestScenarioProvider implements ArgumentsProvider {
+        @Override
+        public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
+            return Stream.of(
+                    Arguments.of("PARTICIPANT NAME EQ", GAIAX_VC_PARTICIPANT_NAME, Operator.EQ, "foo", true),
+                    Arguments.of("PARTICIPANT NAME NEQ", GAIAX_VC_PARTICIPANT_NAME, Operator.NEQ, "bar", true),
+                    Arguments.of("PARTICIPANT HEADQUARTER ADDRESS COUNTRY IN", GAIAX_VC_PARTICIPANT_HEADQUARTER_ADDRESS_COUNTRY, Operator.IN, List.of("DE", "ES"), true),
+                    Arguments.of("PARTICIPANT LEGAL ADDRESS COUNTRY IN", GAIAX_VC_PARTICIPANT_LEGAL_ADDRESS_COUNTRY, Operator.IN, List.of("DE", "ES"), false)
+            );
+        }
     }
 }

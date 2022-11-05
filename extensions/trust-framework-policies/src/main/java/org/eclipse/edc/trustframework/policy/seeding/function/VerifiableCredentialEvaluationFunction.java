@@ -61,7 +61,7 @@ public class VerifiableCredentialEvaluationFunction implements AtomicConstraintF
                     .collect(Collectors.toList());
             return evaluate(values, rightValue, operator);
         } catch (Exception e) {
-            String errorMsg = "Failed to evaluate function on Verifiable Credentials: " + claims;
+            var errorMsg = "Failed to evaluate function on Verifiable Credentials: " + claims;
             monitor.warning(errorMsg, e);
             throw new PolicyEvaluationException(errorMsg);
         }

@@ -10,7 +10,10 @@
 
 LICENSE @bscholtes1a
 
+.github/actions/ @bscholtes1a
 .github/ISSUE_TEMPLATE @bscholtes1a
 .github/workflows/ @bscholtes1a
 
 /docs/ @bscholtes1a
+/spi/ @bscholtes1a
+/extensions/ @bscholtes1a

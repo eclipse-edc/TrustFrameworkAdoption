@@ -14,5 +14,17 @@
 
 rootProject.name = "trust-framework-adoption"
 
-include(":spi:trust-framework-spi")
-include(":extensions:trust-framework-policies")
+// this is needed to have access to snapshot builds of plugins
+// that are used at the root project level, such as "module-names"
+pluginManagement {
+    repositories {
+        maven {
+            url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
+        }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+include(":spi:common:trust-framework-spi")
+include(":extensions:common:trust-framework-policies")

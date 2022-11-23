@@ -8,36 +8,38 @@
  *  SPDX-License-Identifier: Apache-2.0
  *
  *  Contributors:
- *       Amadeus - initial API and implementation
+ *       Amadeus - initial implementation
  *
  */
-
 
 plugins {
     `java-library`
 }
 
-repositories {
-    mavenCentral()
-}
 
-val javaVersion: String by project
+val edcDeveloperId: String by project
+val edcDeveloperName: String by project
+val edcDeveloperEmail: String by project
 val edcScmConnection: String by project
 val edcWebsiteUrl: String by project
 val edcScmUrl: String by project
 val edcGroup: String by project
-val defaultVersion: String by project
 val annotationProcessorVersion: String by project
 val metaModelVersion: String by project
+val javaVersion: String by project
 
-val actualVersion: String = (project.findProperty("trustFrameworkAdoptionVersion") ?: defaultVersion) as String
+val defaultVersion: String by project
+
+// makes the project version overridable using the "-PtrustFrameworkAdoption..." flag. Useful for CI builds
+val actualVersion: String = (project.findProperty("trustFrameworkAdoption") ?: defaultVersion) as String
 
 buildscript {
     dependencies {
         val edcGradlePluginsVersion: String by project
-        classpath("org.eclipse.dataspaceconnector.edc-build:org.eclipse.dataspaceconnector.edc-build.gradle.plugin:${edcGradlePluginsVersion}")
+        classpath("org.eclipse.edc.edc-build:org.eclipse.edc.edc-build.gradle.plugin:${edcGradlePluginsVersion}")
     }
 }
+
 
 allprojects {
     apply(plugin = "${edcGroup}.edc-build")
@@ -48,12 +50,12 @@ allprojects {
         outputDirectory.set(project.buildDir)
     }
 
-    // the following block is optional, as the BuildExtension already provides defaults
     configure<org.eclipse.edc.plugins.edcbuild.extensions.BuildExtension> {
         versions {
             // override default dependency versions here
             projectVersion.set(actualVersion)
             metaModel.set(metaModelVersion)
+
         }
         pom {
             projectName.set(project.name)
@@ -77,4 +79,5 @@ allprojects {
             println(sourceSets["main"].runtimeClasspath.asPath)
         }
     }
+
 }

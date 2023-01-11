@@ -1,0 +1,23 @@
+{
+  "id": "did:web:compliance.gaia-x.eu",
+  "gx-participant:name": "Gaia-X AISBL",
+  "gx-participant:legalName": "Gaia-X European Association for Data and Cloud AISBL",
+  "gx-participant:registrationNumber": {
+    "gx-participant:registrationNumberType": "local",
+    "gx-participant:registrationNumberNumber": "0762747721"
+  },
+  "gx-participant:headquarterAddress": {
+    "gx-participant:addressCountryCode": "BE",
+    "gx-participant:addressCode": "BE-BRU",
+    "gx-participant:streetAddress": "Avenue des Arts 6-9",
+    "gx-participant:postalCode": "1210"
+  },
+  "gx-participant:legalAddress": {
+    "gx-participant:addressCountryCode": "BE",
+    "gx-participant:addressCode": "BE-BRU",
+    "gx-participant:streetAddress": "Avenue des Arts 6-9",
+    "gx-participant:postalCode": "1210"
+  },
+  "gx-participant:termsAndConditions": "70c1d713215f95191a11d38fe2341faed27d19e083917bc8732ca4fea4976700"
+}
+

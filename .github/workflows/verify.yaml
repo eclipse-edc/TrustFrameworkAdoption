@@ -27,7 +27,7 @@ jobs:
       - uses: ./.github/actions/setup-build
 
       - name: Run Checkstyle
-        run: ./gradlew checkstyleMain checkstyleTest
+        run: ./gradlew checkstyleMain checkstyleTest checkstyleTestFixtures
 
   Dependency-analysis:
     runs-on: ubuntu-latest

@@ -1,0 +1,51 @@
+@startuml
+skinparam BoxPadding 10
+autonumber "<b>0'.'"
+
+box "Participant A" #LightPink
+actor " " as ParticipantA
+participant "EDC\nIdentityHub" as IdentityHub
+database "IdentityHub\nStore" as VcStore
+end box
+
+box "Trust Anchor" #LightGreen
+participant "Signature\nService" as TrustAnchor
+end box
+
+box "Gaia-X" #LightYellow
+Participant "Compliance\nService" as GaiaX
+end box
+
+box "Participant B" #LightBlue
+Participant "Client" as ParticipantB
+end box
+
+== Self-Description creation ==
+
+ParticipantA -> IdentityHub ++: Send claims
+activate ParticipantA
+deactivate ParticipantA
+group Option A: self-signing
+  autonumber 2
+  IdentityHub -> IdentityHub: Normalize (canonize)\nand compute hash
+  IdentityHub -> IdentityHub: Sign hash and\ncreate VC (claims + proof)
+end
+group Option B: notarization officer (trust anchor)
+  autonumber 2
+  IdentityHub -> TrustAnchor ++: Send claims
+  return VC (claims + proof)
+end
+IdentityHub -> GaiaX ++: send VC
+return compliance credential (another VC)
+IdentityHub -> VcStore ++: store both VCs
+
+== Self-Description presentation ==
+
+ParticipantB -> IdentityHub : request Participant A \nsigned self-description
+activate ParticipantB
+group self-description aggregation
+  IdentityHub -> VcStore : retrieve VCs
+  VcStore --> IdentityHub : self-description and compliance credential
+end
+IdentityHub --> ParticipantB : complete self-description
+@enduml

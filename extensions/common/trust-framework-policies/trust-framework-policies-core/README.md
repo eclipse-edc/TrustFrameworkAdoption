@@ -138,3 +138,10 @@ This `PolicyDefinition` object can be created at runtime by leveraging the Manag
 
 Finally, we can reference the newly created Policy into the Contract Offer(s) for which we want to put access/usage control in place. 
 EDC takes care of the rest!
+
+### Using the GAIA-X Compliance evaluation function
+
+Also provided in this extension, an evaluation function for Gaia-x Compliance Credentials `GaiaxComplianceConstraintFunction`, which can used same as described above.
+This function also verifies the validity of a Gaia-x Compliance: 
+- More info on the credential format: [Gaia-X Credential format](https://gaia-x.gitlab.io/technical-committee/federation-services/icam/credential_format/#gaia-x-compliance-inputoutput)
+- This simple wizard can used to create a credential: [Wizard](https://wizard.lab.gaia-x.eu/)
